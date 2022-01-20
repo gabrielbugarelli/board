@@ -13,6 +13,7 @@ const TaskBoard = () => {
         <form>
           <input 
             type="text"
+            autoFocus
             placeholder='o que pretende fazer hoje?'
           />
 
