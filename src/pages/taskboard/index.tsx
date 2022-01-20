@@ -1,0 +1,65 @@
+import Head from 'next/head';
+import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
+import styles from './styles.module.scss';
+
+const TaskBoard = () => {
+  return (
+    <>
+      <Head>
+        <title>Minhas tarefas - TaskBoard</title>
+      </Head>
+
+      <main className={styles.container}>
+        <form>
+          <input 
+            type="text"
+            placeholder='o que pretende fazer hoje?'
+          />
+
+          <button type="submit">
+            <FiPlus size={25} color="#17181f"/>
+          </button>
+        </form>
+
+        <h1>Você tem 2 tarefas!</h1>
+
+        <section>
+          <article className={styles.taskList}>
+            <p>Aprender criar projetos usando NextJS e aplicando firebase como back.</p>
+            <div className={styles.actions}>
+              <div>
+                <div>
+                  <FiCalendar size={20} color="#ffb800"/>
+                  <time>17 de Julho de 2021</time>
+                </div>
+
+                <button>
+                  <FiEdit2 size={20} color="azure" />
+                  <span>Editar</span>
+                </button>
+              </div>
+
+              <button>
+                <FiTrash size={20} color="#ff3636"/>
+                <span>Excluir</span>
+              </button>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <footer  className={styles.vipContainer}>
+        <div>
+          <FiClock color='azure' size={25} />
+          <time>
+            Última doação foi a 3 dias.
+          </time>
+        </div>
+
+        <p>Feito com ❤️ <a href="https://github.com/gabrielbugarelli" target='_blank'>@gabrielbugarelli</a></p>
+      </footer>
+    </>
+  )
+}
+
+export default TaskBoard;

@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        Página inicial
+        <title>Página inicial</title>
       </Head>
 
       <main className={styles.contentContainer}>
