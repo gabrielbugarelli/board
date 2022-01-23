@@ -56,7 +56,7 @@ const TaskBoard = () => {
         <div>
           <FiClock color='azure' size={25} />
           <time>
-            Última doação foi a 3 dias.
+            Última colaboração foi a 3 dias.
           </time>
         </div>
 
