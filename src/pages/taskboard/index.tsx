@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
+import { SupportButton } from '../../components/SupportButton';
 import styles from './styles.module.scss';
 
 const TaskBoard = () => {
@@ -59,6 +60,8 @@ const TaskBoard = () => {
 
         <p>Feito com ❤️ <a href="https://github.com/gabrielbugarelli" target='_blank'>@gabrielbugarelli</a></p>
       </footer>
+
+      <SupportButton />
     </>
   )
 }
