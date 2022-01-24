@@ -1,11 +1,52 @@
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import Head from 'next/head';
-import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
+import { useState, FormEvent } from 'react';
 import { SupportButton } from '../../components/SupportButton';
+import Head from 'next/head';
+
+import { firebase } from '../../services/firebaseConnection';
+
+import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
 import styles from './styles.module.scss';
 
-const TaskBoard = () => {
+type BoardProps = {
+  user: {
+    id: string,
+    name: string
+  }
+}
+
+const TaskBoard = ({ user }: BoardProps) => {
+
+  const [ inputTask, setInputTask ] = useState<string>('');
+
+  /** 
+   * @param event -> executa método para impedir carregamento padão do form.
+   */
+  const handleAddTask = async (event: FormEvent) => {
+    event.preventDefault();
+
+    if( inputTask === '') {
+      alert('Preencha uma tarefa!');
+      return;
+    }
+
+    await firebase.firestore()
+      .collection('tasks')
+      .add({
+        userId: user.id,
+        task: inputTask,
+        name: user.name,
+        created: new Date()
+      })
+      .then((doc) => {
+        console.log('cadastrado com sucesso!');
+      })
+      .catch((error) => {
+        console.log(`ERRO AO CADASTRAR: ${error}`);
+      })
+  }
+
   return (
     <>
       <Head>
@@ -13,10 +54,12 @@ const TaskBoard = () => {
       </Head>
 
       <main className={styles.container}>
-        <form>
+        <form onSubmit={handleAddTask}>
           <input 
             type="text"
             autoFocus
+            value={inputTask}
+            onChange={(value) => setInputTask(value.target.value)}
             placeholder='o que pretende fazer hoje?'
           />
 
@@ -73,9 +116,8 @@ export default TaskBoard;
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
 
+  //Se não tiver um usuário autenticado, redireciona para a página inicial
   if(!session?.id) {
-    //Se não tiver um usuário autenticado, redireciona para a página inicial
-
     return {
       redirect: {
         destination: '/',
@@ -84,9 +126,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   }
 
+  const user = {
+    id: session?.id,
+    name: session?.user.name
+  }
+
   return {
     props: {
-
+      user
     }
   }
 }
