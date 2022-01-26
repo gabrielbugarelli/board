@@ -1,10 +1,12 @@
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useState, FormEvent } from 'react';
-import { SupportButton } from '../../components/SupportButton';
-import Head from 'next/head';
+import firebase from '../../services/firebaseConnection';
+import { format } from 'date-fns';
 
-import { firebase } from '../../services/firebaseConnection';
+import Head from 'next/head';
+import Link from 'next/link';
+import { SupportButton } from '../../components/SupportButton';
 
 import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
 import styles from './styles.module.scss';
@@ -19,9 +21,10 @@ type BoardProps = {
 const TaskBoard = ({ user }: BoardProps) => {
 
   const [ inputTask, setInputTask ] = useState<string>('');
+  const [ tasklist, setTaskList ] = useState([]);
 
   /** 
-   * @param event -> executa método para impedir carregamento padão do form.
+   * @param event -> executa método para impedir carregamento padrão do form.
    */
   const handleAddTask = async (event: FormEvent) => {
     event.preventDefault();
@@ -40,7 +43,17 @@ const TaskBoard = ({ user }: BoardProps) => {
         created: new Date()
       })
       .then((doc) => {
-        console.log('cadastrado com sucesso!');
+        let data = {
+          id: doc.id,
+          created: new Date(),
+          createdFormat: format(new Date(), "dd MMMM yyyy"),
+          task: inputTask,
+          userId: user.id,
+          name: user.name
+        }
+
+        setTaskList([...tasklist, data]);
+        setInputTask('');
       })
       .catch((error) => {
         console.log(`ERRO AO CADASTRAR: ${error}`);
@@ -71,27 +84,31 @@ const TaskBoard = ({ user }: BoardProps) => {
         <h1>Você tem 2 tarefas!</h1>
 
         <section>
-          <article className={styles.taskList}>
-            <p>Aprender criar projetos usando NextJS e aplicando firebase como back.</p>
-            <div className={styles.actions}>
-              <div>
+          {tasklist.map( task => (
+            <article className={styles.taskList} key={task.id}>
+              <Link href={`/board/${task.id}`}>
+                <p>{task.task}</p>
+              </Link>
+              <div className={styles.actions}>
                 <div>
-                  <FiCalendar size={20} color="#ffb800"/>
-                  <time>17 de Julho de 2021</time>
+                  <div>
+                    <FiCalendar size={20} color="#ffb800"/>
+                    <time>{task.createdFormat}</time>
+                  </div>
+
+                  <button>
+                    <FiEdit2 size={20} color="azure" />
+                    <span>Editar</span>
+                  </button>
                 </div>
 
                 <button>
-                  <FiEdit2 size={20} color="azure" />
-                  <span>Editar</span>
+                  <FiTrash size={20} color="#ff3636"/>
+                  <span>Excluir</span>
                 </button>
               </div>
-
-              <button>
-                <FiTrash size={20} color="#ff3636"/>
-                <span>Excluir</span>
-              </button>
-            </div>
-          </article>
+            </article>
+          ))}
         </section>
       </main>
 
