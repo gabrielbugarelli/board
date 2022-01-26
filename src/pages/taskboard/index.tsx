@@ -143,14 +143,27 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   }
 
-  const user = {
-    id: session?.id,
-    name: session?.user.name
-  }
+    const tasks = await firebase.firestore().collection('tasks').orderBy('created', 'asc').get();
 
-  return {
-    props: {
-      user
+    const data = tasks.docs.map( item => {
+      return {
+        id: item.id,
+        createdFormat: format(item.data().created.toDate(), "dd MMMM yyyy"),
+        ...item.data()
+      }
+    })
+
+    const rowData = JSON.stringify(data);
+
+    const user = {
+      id: session?.id,
+      name: session?.user.name
     }
-  }
+
+    return {
+      props: {
+        user,
+        rowData
+      }
+    }
 }
