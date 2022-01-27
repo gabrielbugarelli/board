@@ -11,17 +11,27 @@ import { SupportButton } from '../../components/SupportButton';
 import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
 import styles from './styles.module.scss';
 
+type TaskList = {
+  id: string;
+  created: string | Date;
+  createdFormated?: string;
+  task: string;
+  userId: string;
+  name: string;
+}
+
 type BoardProps = {
   user: {
     id: string,
     name: string
   }
+  data: string
 }
 
-const TaskBoard = ({ user }: BoardProps) => {
+const TaskBoard = ({ user, data }: BoardProps) => {
 
   const [ inputTask, setInputTask ] = useState<string>('');
-  const [ tasklist, setTaskList ] = useState([]);
+  const [ tasklist, setTaskList ] = useState<TaskList[]>(JSON.parse(data));
 
   /** 
    * @param event -> executa método para impedir carregamento padrão do form.
@@ -46,7 +56,7 @@ const TaskBoard = ({ user }: BoardProps) => {
         let data = {
           id: doc.id,
           created: new Date(),
-          createdFormat: format(new Date(), "dd MMMM yyyy"),
+          createdFormated: format(new Date(), "dd MMMM yyyy"),
           task: inputTask,
           userId: user.id,
           name: user.name
@@ -56,7 +66,7 @@ const TaskBoard = ({ user }: BoardProps) => {
         setInputTask('');
       })
       .catch((error) => {
-        console.log(`ERRO AO CADASTRAR: ${error}`);
+        console.warn(`ERRO AO CADASTRAR: ${error}`);
       })
   }
 
@@ -81,7 +91,7 @@ const TaskBoard = ({ user }: BoardProps) => {
           </button>
         </form>
 
-        <h1>Você tem 2 tarefas!</h1>
+        <h1>Você tem {tasklist.length} {tasklist.length === 1 ? 'tarefa!' : 'tarefas!'}</h1>
 
         <section>
           {tasklist.map( task => (
@@ -93,7 +103,7 @@ const TaskBoard = ({ user }: BoardProps) => {
                 <div>
                   <div>
                     <FiCalendar size={20} color="#ffb800"/>
-                    <time>{task.createdFormat}</time>
+                    <time>{task.createdFormated}</time>
                   </div>
 
                   <button>
@@ -143,27 +153,28 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   }
 
-    const tasks = await firebase.firestore().collection('tasks').orderBy('created', 'asc').get();
+  const tasks = await firebase.firestore().collection('tasks')
+  .where('userId', '==', session?.id)
+  .orderBy('created', 'asc').get();
 
-    const data = tasks.docs.map( item => {
+  const data = JSON.stringify(tasks.docs.map( item => {
       return {
         id: item.id,
-        createdFormat: format(item.data().created.toDate(), "dd MMMM yyyy"),
+        createdFormated: format(item.data().created.toDate(), "dd MMMM yyyy"),
         ...item.data()
       }
     })
+  )
 
-    const rowData = JSON.stringify(data);
+  const user = {
+    id: session?.id,
+    name: session?.user.name
+  }
 
-    const user = {
-      id: session?.id,
-      name: session?.user.name
+  return {
+    props: {
+      user,
+      data
     }
-
-    return {
-      props: {
-        user,
-        rowData
-      }
-    }
+  }
 }
