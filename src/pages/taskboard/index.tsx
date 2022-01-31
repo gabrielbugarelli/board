@@ -70,6 +70,22 @@ const TaskBoard = ({ user, data }: BoardProps) => {
       })
   }
 
+  const hadleDeleteTask = async (id: string) => {
+    await firebase.firestore().collection('tasks').doc(id)
+    .delete()
+    .then(() => {
+      let taskDeleted = tasklist.filter(item => {
+        return item.id !== id;
+      })
+
+      setTaskList(taskDeleted);
+    })
+
+    .catch((error) => {
+      console.warn(`ERRO AO DELETAR: ${error}`);
+    })
+  }
+
   return (
     <>
       <Head>
@@ -112,7 +128,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
                   </button>
                 </div>
 
-                <button>
+                <button onClick={() => hadleDeleteTask(task.id)}>
                   <FiTrash size={20} color="#ff3636"/>
                   <span>Excluir</span>
                 </button>
