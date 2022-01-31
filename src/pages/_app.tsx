@@ -1,17 +1,17 @@
 import { AppProps } from 'next/app';
-import { Provider } from 'next-auth/client';
-
 import { Header } from '../components/Header';
 
 import '../styles/global.scss';
 
-function MyApp({ Component, pageProps}: AppProps) {
+import { Provider as NextAuthProvider } from 'next-auth/client';
+
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Provider session={pageProps.session}>
-      <Header />
+    <NextAuthProvider session={pageProps.session} >
+      <Header/>
       <Component {...pageProps} />
-    </Provider>
+    </NextAuthProvider>
   )
 }
 
-export default MyApp;
+export default MyApp

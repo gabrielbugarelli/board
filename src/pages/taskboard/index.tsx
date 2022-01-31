@@ -128,7 +128,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
         {taskEdit && (
           <span className={styles.warnText}>
             <button onClick={handleCancelEdit}>
-              <FiX size={20} color='#ff3636' />
+              <FiX size={30} color='#ff3636' />
             </button>
             Editando tarefa...
           </span>

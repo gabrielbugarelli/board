@@ -1,4 +1,5 @@
-.contentContainer {
+
+.contentContainer{
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 2rem;
@@ -8,15 +9,16 @@
   justify-content: center;
   flex-direction: column;
 
-  img {
+  img{
     margin-top: 2rem;
   }
+
 }
 
-.callToAction {
+.callToAction{
   max-width: 700px;
 
-  h1 {
+  h1{
     font-size: 1.8rem;
     margin-top: 1rem;
     font-weight: bold;
@@ -24,31 +26,31 @@
     color: #141a29;
   }
 
-  p {
+  p{
     margin-top: 1rem;
     font-size: 1.5rem;
     text-align: center;
     color: #141a29;
-    
-    span {
+
+    span{
       color: #04dd75;
       font-weight: bold;
     }
   }
+
 }
 
-.donaters {
+.donaters{
   display: flex;
   justify-content: center;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
-  
 
-  img {
+  img{
     width: 65px;
     height: 65px;
     border-radius: 50%;
-    border: 2px solid #141a29; 
+    border: 2px solid #141a29;
     transition: all 0.2s;
 
     + img {
