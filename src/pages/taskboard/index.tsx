@@ -8,7 +8,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { SupportButton } from '../../components/SupportButton';
 
-import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
+import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock, FiX } from 'react-icons/fi';
 import styles from './styles.module.scss';
 
 type TaskList = {
@@ -31,16 +31,38 @@ type BoardProps = {
 const TaskBoard = ({ user, data }: BoardProps) => {
 
   const [ inputTask, setInputTask ] = useState<string>('');
-  const [ tasklist, setTaskList ] = useState<TaskList[]>(JSON.parse(data));
+  const [ taskList, setTaskList ] = useState<TaskList[]>(JSON.parse(data));
+  const [ taskEdit, setTaskEdit ] = useState<TaskList | null>(null);
 
   /** 
    * @param event -> executa método para impedir carregamento padrão do form.
+   * @description de premissa, o método é encarregado por criar novas tarefas,
+   * contudo, caso o usuário estiver editando uma tarefa, o método identificará
+   * e logo, fará update da tarefa.
    */
   const handleAddTask = async (event: FormEvent) => {
     event.preventDefault();
 
     if( inputTask === '') {
       alert('Preencha uma tarefa!');
+      return;
+    }
+
+    if(taskEdit) {
+      await firebase.firestore().collection('tasks').doc(taskEdit.id)
+      .update({
+        task: inputTask
+      })
+      .then(() => {
+        let data = taskList;
+        let taskIndex = taskList.findIndex(item => item.id === taskEdit.id);
+        data[taskIndex].task = inputTask;
+
+        setTaskList(data);
+        setTaskEdit(null);
+        setInputTask('');
+      })
+
       return;
     }
 
@@ -62,7 +84,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
           name: user.name
         }
 
-        setTaskList([...tasklist, data]);
+        setTaskList([...taskList, data]);
         setInputTask('');
       })
       .catch((error) => {
@@ -74,7 +96,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
     await firebase.firestore().collection('tasks').doc(id)
     .delete()
     .then(() => {
-      let taskDeleted = tasklist.filter(item => {
+      let taskDeleted = taskList.filter(item => {
         return item.id !== id;
       })
 
@@ -86,6 +108,16 @@ const TaskBoard = ({ user, data }: BoardProps) => {
     })
   }
 
+  const handleEditTask = async (task: TaskList) => {
+    setTaskEdit(task)    
+    setInputTask(task.task)
+  }
+
+  const handleCancelEdit = () => {
+    setInputTask('');
+    setTaskEdit(null);
+  }
+
   return (
     <>
       <Head>
@@ -93,6 +125,15 @@ const TaskBoard = ({ user, data }: BoardProps) => {
       </Head>
 
       <main className={styles.container}>
+        {taskEdit && (
+          <span className={styles.warnText}>
+            <button onClick={handleCancelEdit}>
+              <FiX size={20} color='#ff3636' />
+            </button>
+            Editando tarefa...
+          </span>
+        )}
+
         <form onSubmit={handleAddTask}>
           <input 
             type="text"
@@ -107,10 +148,10 @@ const TaskBoard = ({ user, data }: BoardProps) => {
           </button>
         </form>
 
-        <h1>Você tem {tasklist.length} {tasklist.length === 1 ? 'tarefa!' : 'tarefas!'}</h1>
+        <h1>Você tem {taskList.length} {taskList.length === 1 ? 'tarefa!' : 'tarefas!'}</h1>
 
         <section>
-          {tasklist.map( task => (
+          {taskList.map( task => (
             <article className={styles.taskList} key={task.id}>
               <Link href={`/board/${task.id}`}>
                 <p>{task.task}</p>
@@ -122,7 +163,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
                     <time>{task.createdFormated}</time>
                   </div>
 
-                  <button>
+                  <button onClick={() => handleEditTask(task)}>
                     <FiEdit2 size={20} color="azure" />
                     <span>Editar</span>
                   </button>
