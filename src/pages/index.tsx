@@ -16,12 +16,14 @@ export default function Home() {
           <h1>Uma ferramenta para o seu dia a dia. Escreva, planeje e organize-se...</h1>
 
           <p>
-            <span>100% Gratuita</span> e online.
+            <span>Grátis</span> e online.
           </p>
         </section>
 
         <div className={styles.donaters}>
-          <img src="https://avatars.githubusercontent.com/u/47955200?v=4" alt="avatar" />
+          <a href="https://github.com/gabrielbugarelli" target='_blank'>
+            <img src="https://avatars.githubusercontent.com/u/47955200?v=4" alt="avatar" />
+          </a>
         </div>
       </main>
     </>
