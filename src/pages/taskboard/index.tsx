@@ -35,7 +35,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
   const [ taskEdit, setTaskEdit ] = useState<TaskList | null>(null);
 
   /** 
-   * @param event -> executa método para impedir carregamento padrão do form.
+   * @description -> executa método para impedir carregamento padrão do form.
    * @description de premissa, o método é encarregado por criar novas tarefas,
    * contudo, caso o usuário estiver editando uma tarefa, o método identificará
    * e logo, fará update da tarefa.
@@ -120,7 +120,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
 
   return (
     <>
-      <Head>
+      <Head children={''}>
         <title>Minhas tarefas - TaskBoard</title>
       </Head>
 
