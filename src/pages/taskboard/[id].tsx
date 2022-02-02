@@ -1,8 +1,12 @@
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import Head from 'next/head';
 
 import firebase from 'firebase';
 import { format } from 'date-fns';
+
+import { FiCalendar } from 'react-icons/fi';
+import styles from './taskDetails.module.scss';
 
 type TaskListProps = {
   data: string
@@ -21,10 +25,22 @@ export default function Task({ data }: TaskListProps){
   const task: Task = JSON.parse(data);
 
   return(
-    <div>
-      <h1>Pagina detalhes</h1>
-      <h2>{task.task}</h2>
-    </div>
+    <>
+      <Head children>
+        <title>{task.task}</title>
+      </Head>
+      
+      <article className={styles.container}>
+        <div className={styles.actions}>
+          <div>
+            <FiCalendar size={30} color='#fff'/>
+            <span>Tarefa criada:</span>
+            <time>{task.createdFormat}</time>
+          </div>
+        </div>
+        <p>{task.task}</p>
+      </article>
+    </>
   )
 }
 
