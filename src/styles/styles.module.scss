@@ -1,8 +1,9 @@
 
 .contentContainer{
   max-width: 1120px;
+  max-height: calc(100vh - 6rem);
   margin: 0 auto;
-  padding: 0 2rem;
+  margin-top: 0.5rem;
 
   display: flex;
   align-items: center;

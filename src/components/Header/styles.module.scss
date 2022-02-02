@@ -1,6 +1,8 @@
 .headerContainer {
-  height: 6rem;
+  height: 4rem;
   background-color: #141a29;
+  display: flex;
+  align-items: center;
 }
 
 .headerContent {
@@ -9,14 +11,15 @@
   height: 6rem;
   display: flex;
   align-items: center;
-
+  
   img {
+    width: 50px;
+    height: 50px;
     cursor: pointer;
   }
 
   nav {
-    margin-left: 5rem;
-    height: 5rem;
+    margin: 0 10rem;
 
     a {
       display: inline-block;

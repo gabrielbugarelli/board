@@ -8,8 +8,9 @@ export function Header(){
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
         <Link href="/">
-          <img src="/images/logo.svg" alt="Logo Meu board" />
+          <img src="/images/logo.svg" alt="Logo Taskdo" />
         </Link>
+        
         <nav>
           <Link href="/">
             <a>HOME</a>
@@ -20,7 +21,6 @@ export function Header(){
         </nav>
 
         <SignInButton/>
-        
       </div>
     </header>
   )
