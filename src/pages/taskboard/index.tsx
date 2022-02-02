@@ -153,7 +153,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
         <section>
           {taskList.map( task => (
             <article className={styles.taskList} key={task.id}>
-              <Link href={`/board/${task.id}`}>
+              <Link href={`/taskboard/${task.id}`}>
                 <p>{task.task}</p>
               </Link>
               <div className={styles.actions}>
