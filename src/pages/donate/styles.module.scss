@@ -1,0 +1,41 @@
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: calc(100vh - 6rem);
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  h1 {
+    margin: 1rem 0;
+    font-size: 2.5rem;
+  }
+
+  strong {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    background-color: #eee;
+    padding: 0.8rem;
+  }
+}
+
+.vip {
+  margin-top: 1.5rem;
+  background-color: #019950;
+  padding: 1rem;
+  border-radius: 5px;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%
+  }
+}

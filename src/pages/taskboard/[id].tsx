@@ -26,7 +26,7 @@ export default function Task({ data }: TaskListProps){
 
   return(
     <>
-      <Head children>
+      <Head>
         <title>{task.task}</title>
       </Head>
       

@@ -120,7 +120,7 @@ const TaskBoard = ({ user, data }: BoardProps) => {
 
   return (
     <>
-      <Head children={''}>
+      <Head>
         <title>Minhas tarefas - TaskBoard</title>
       </Head>
 
