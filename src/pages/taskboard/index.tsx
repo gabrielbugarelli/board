@@ -2,7 +2,8 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useState, FormEvent } from 'react';
 import firebase from '../../services/firebaseConnection';
-import { format } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 import Head from 'next/head';
 import Link from 'next/link';
@@ -23,7 +24,9 @@ type TaskList = {
 type BoardProps = {
   user: {
     id: string,
-    name: string
+    name: string,
+    vip: boolean,
+    lastDonate: string | Date,
   }
   data: string
 }
@@ -163,10 +166,15 @@ const TaskBoard = ({ user, data }: BoardProps) => {
                     <time>{task.createdFormated}</time>
                   </div>
 
-                  <button onClick={() => handleEditTask(task)}>
-                    <FiEdit2 size={20} color="azure" />
-                    <span>Editar</span>
-                  </button>
+                  {/* somente colabores poderão editar as tasks! */}
+                  { user.vip && 
+                    (
+                      <button onClick={() => handleEditTask(task)}>
+                        <FiEdit2 size={20} color="azure" />
+                        <span>Editar</span>
+                      </button>
+                    )
+                  }
                 </div>
 
                 <button onClick={() => hadleDeleteTask(task.id)}>
@@ -179,16 +187,21 @@ const TaskBoard = ({ user, data }: BoardProps) => {
         </section>
       </main>
 
-      <footer  className={styles.vipContainer}>
-        <div>
-          <FiClock color='azure' size={25} />
-          <time>
-            Última colaboração foi a 3 dias.
-          </time>
-        </div>
+      {/* somente colaboradores poderão vizualizar a contagem de colaboração */}
+      { user.vip && 
+        (
+          <footer  className={styles.vipContainer}>
+            <div>
+              <FiClock color='azure' size={25} />
+              <time>
+                Última colaboração foi a { formatDistance(new Date(user.lastDonate), new Date(), {locale: ptBR}) }
+              </time>
+            </div>
 
-        <p>Feito com ❤️ <a href="https://github.com/gabrielbugarelli" target='_blank'>@gabrielbugarelli</a></p>
-      </footer>
+            <p>Feito com ❤️ <a href="https://github.com/gabrielbugarelli" target='_blank'>@gabrielbugarelli</a></p>
+          </footer>
+        )
+      }
 
       <SupportButton />
     </>
@@ -225,7 +238,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   const user = {
     id: session?.id,
-    name: session?.user.name
+    name: session?.user.name,
+    vip: session?.vip,
+    lastDonate: session?.lastDonate
   }
 
   return {
