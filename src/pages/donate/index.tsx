@@ -53,8 +53,6 @@ const Donate = ({ user }: DonateProps) => {
    */
   const onApproveOrderPaypal = async (data: Record<string, unknown>, actions: OnApproveBraintreeActions) => {
     return actions.order.capture().then((details) => {
-      console.log('Compra aprovada:' + details.payer.name.given_name);
-
       handleSaveDonante()
     })
   }
