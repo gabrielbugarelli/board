@@ -72,6 +72,22 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params })  =
     
     return JSON.stringify(data);
   })
+  .catch(() => {
+    return {};
+  })
+
+  /**
+   * @description caso a rota da task não existir,
+   * o retorna para o /taskboard
+   */
+  if( Object.keys(data).length === 0) {
+    return {
+      redirect: {
+        destination: '/taskboard',
+        permanent: false
+      }
+    }
+  }
 
   return {
     props: {
