@@ -38,15 +38,13 @@ export default function Home({ data }: HomeProps) {
         </section>
 
         <div className={styles.donaters}>
-          <a href="https://github.com/gabrielbugarelli" target='_blank'>
-            {
-              donaters.map( item => {
-                return (
-                  <img src={item.image} key={item.id} alt="avatar do colaborador" />
-                )
-              })
-            }
-          </a>
+          {
+            donaters.map( item => {
+              return (
+                <img src={item.image} key={item.id} alt="avatar do colaborador" />
+              )
+            })
+          }
         </div>
       </main>
     </>
