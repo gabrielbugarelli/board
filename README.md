@@ -1,17 +1,14 @@
-# Ezemoney
+# Taskido
 
-# Olá, você está no repositório do Ezemoney Web.
+# Olá, você está no repositório do Taskido web.
 
-O Ezemoney é um aplicativo web que vai te ajudar a organizar as suas tarefas.
+O Taskido é um aplicativo web que vai te ajudar a organizar as suas tarefas.
 
 Nele, você poderá gerenciar as usas tarefas cotidianas e elimina-las conforme forem sendo concluídas.
 
 Atualmente, o projeto está sendo desenvolvido por [@gabrielbugarelli](https://github.com/gabrielbugarelli)
 
-A versão mobile do projeto você pode conferir em [ezemoney-mobile](https://github.com/gabrielbugarelli/ezemoney-mobile)
-
 Sinta-se a vontade para deixar o seu feedback.
-
 
 ### Tecnologias utilizadas: 
 - NextJS
